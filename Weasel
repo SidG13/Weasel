@@ -1,0 +1,42 @@
+import random
+
+mutrate = 0.05
+ref_string = "METHINKS*IT*IS*LIKE*A*WEASEL"
+
+# make the first random string
+ancestor = ''
+for i in range(len(ref_string)):
+    char = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "*")
+    ancestor = ancestor + char
+print(ancestor)
+print("---------------")
+
+
+# score children
+def fitness_score(string2):
+    return sum(a == b for a, b in zip(string2, ref_string))
+
+# mutate any string 100x, RETURN histring and hiscore
+def str_mutator(string):
+    childNumber=100
+    hiscore=0
+    histring=''
+    for i in range(1, childNumber):
+        copy = list(string)
+        for c in range(len(copy)):
+            char = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "*")
+            if random.random() < mutrate:
+                copy[c] = char
+            string3 = ''.join(copy)
+        if fitness_score(string3) > hiscore:
+            hiscore = fitness_score(string3)
+            histring = string3
+        #print(string3, fitness_score(string3))
+    print("---------------")
+    print(histring, hiscore)
+    while histring != ref_string:
+        histring = str_mutator(histring)
+    return histring
+
+str_mutator(ancestor)
+
